@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import PublicLayout from './layouts/Layout';
+import Home from './components/Home';
+import Login from './screens/Login';
+import Dashboard from './screens/Dashboard';
+import PrivateLayout from './layouts/PrivateLayout';
+import Logout from './screens/Logout';
+import ShopAccountManager from './screens/EOD_Account/ShopAccountManager';
+
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Routes>
+        <Route path="/" element={<PublicLayout />}>
+          <Route index element={<Home />} />          
+          <Route path="/login" element={<Login />} />
+        </Route>
+        <Route path="/" element={<PrivateLayout />}>
+          <Route index element={<Home />} />          
+          <Route path="/logout" element={<Logout />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/eod-activity" element={<ShopAccountManager />} />
+        </Route>
+
+      </Routes>
   );
 }
 
