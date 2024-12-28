@@ -1,27 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Container, CssBaseline, Box, Avatar, Typography } from "@mui/material";
 import HikingOutlinedIcon from '@mui/icons-material/HikingOutlined';
-import AuthContext from "../shared/AuthContext";
+import UserContext from "../shared/UserContext";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 const Logout = () => {
-    const { setUserData } = useContext(AuthContext);
+    const { setUserData,handleLogout, updateIsAuthenticated } = useContext(UserContext);
     const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        setIsLoading(true);
+        updateIsAuthenticated(false);
+        handleLogout();
         setTimeout(() => {
-            setUserData(null);
             console.log('This will run after 5 seconds!')
             Cookies.set("kvsrsUser", null);
             Cookies.remove("kvsrsUser");
-            setIsLoading(false);
             navigate('/login', { replace: true });
-        }, 3000);
-    },[])
+        }, 5000);
+    })
 
     const defaultTheme = createTheme();
     return (

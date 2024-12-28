@@ -1,7 +1,17 @@
-import React, { Component } from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import UserContext from '../shared/UserContext';
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useContext(UserContext); // Get isAuthenticated from context
 
+  useEffect(() => {
+    // Redirect based on authentication status
+    //const redirectTo = isAuthenticated ? '/dashboard' : '/login';
+    //navigate(redirectTo);
+    console.log('isAuthenticated on home page - ' + isAuthenticated);
+  }, []);
     return (
       <div>
         <h1>Hello, world!</h1>

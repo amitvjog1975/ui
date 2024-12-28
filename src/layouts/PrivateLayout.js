@@ -4,11 +4,11 @@ import Cookies from 'js-cookie';
 
 import AppContext from '../shared/AppContext';
 import { jwtDecode } from 'jwt-decode';
-import Header from './Header';
 import Sidebar from "./Sidebar";
 import { Container } from "reactstrap";
 import { AppBar, IconButton, Toolbar, Typography, Drawer, Box } from '@mui/material';
 import CrisisAlertIcon from '@mui/icons-material/CrisisAlert';
+import { DashboardLayout } from '@toolpad/core/DashboardLayout';
 
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -17,8 +17,6 @@ function PrivateLayout() {
   const [_userInfo, set_UserInfo] = useState(null);
 
   const navigate = useNavigate();
-  const { setAlert, alertSeverity, showAlert, alertColor, alertMessage } = useContext(AppContext);
-
   let cookieDataStr = Cookies.get("kvsrsUser");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
@@ -49,10 +47,10 @@ function PrivateLayout() {
       Cookies.remove("kvsrsUser");
       navigate("/login", { replace: true });
     }
-
   }, [])
 
   function isTokenExpired(token) {
+    //debugger
     const decodedToken = jwtDecode(token);
     const expirationTime = decodedToken.exp * 1000; // Convert seconds to milliseconds
     const currentTime = Date.now();
@@ -69,7 +67,7 @@ function PrivateLayout() {
 
   return (
     <main>
-      <AppBar position="fixed" elevation={1} sx={{ backgroundColor:"primary"}}>
+      <AppBar position="fixed" elevation={1} sx={{ backgroundColor: "primary" }}>
         <Toolbar>
           <IconButton
             color="inherit"

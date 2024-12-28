@@ -1,12 +1,10 @@
 import React from "react";
-import "./loader.scss";
-import { Spinner } from "reactstrap";
+import "./loader.css";
+import { LinearProgress } from "@mui/material";
 
 const Loader = () => (
-  <div className="fallback-spinner">
-    <div className="loading">
-      <Spinner color="primary" />
-    </div>
+  <div className="loader-overlay">
+    <div className="loader"></div> {/* Test with static text */}
   </div>
 );
 export default Loader;

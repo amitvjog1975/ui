@@ -1,57 +1,83 @@
-import { Children, createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import Cookies from 'js-cookie';
-import { masterService } from "../services";
+import { shopService } from "../services";
 
-const UserContext = createContext({
-    userData: null,
-    setUserData: () => { },
-    token: null,
-    setTokenValue: () => {},
-    logout: () => {},
-    getMasterData: () => {},
-    shopList: null,
-    setAlert: () => {},
-})
+const UserContext = createContext();
 
 
-export const UserProvider = ({ children }) => {
+export function UserProvider({ children }) {
     const [userData, setUserData] = useState(null);
     const [shopList, setShopList] = useState(null);
     const [token, setToken] = useState(null);
-    const [alertSeverity, setAlertSeverity] = useState('success')
-    const [showAlert, setShowAlert] = useState(false)
-    const [alertColor, setAlertColor] = useState('info')
-    const [alertMessage, setAlertMessage] = useState(null)
+    const [eodShopId, setEodShopId] = useState(sessionStorage.getItem('eodShopId') || null);
+    const [eodAccountDate, setEodAccountDate] = useState(sessionStorage.getItem('eodAccountDate') || null);
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
 
     useEffect(() => {
         let cookieDataStr = Cookies.get("kvsrsUser");
         if (cookieDataStr !== null && cookieDataStr !== undefined && cookieDataStr !== "") {
             let userData = JSON.parse(cookieDataStr);
             setUserData(userData);
-            getMasterData(userData.userID);
+            setIsAuthenticated(true);                        
+            shopService.getShopMasterList().then(result => {
+                setShopList(result.data);
+            })
         }
     }, []);
 
+    useEffect(() => {
+        console.log('isAuthenticated - ' + isAuthenticated);
+    }, [isAuthenticated]);
 
-    const getMasterData = (userID) => {
-        let postData = { 'userID': userID }
-        masterService.getMasterData(postData).then(result => {
-            if (result) {
-                setShopList(result.shopMasterList);
-            }
-        }).catch(err => {
-
-        })
+    const UpdateEodShopID = (value) => {
+        sessionStorage.setItem('eodShopId', value);
+        setEodShopId(value);
     }
 
+    const UpdateEodAccountDate = (value) => {
+        sessionStorage.setItem('eodAccountDate', value);
+        setEodAccountDate(value);
+    }
+
+    const setTokenValue = (value) => {
+        setToken(value);
+    }
+
+    const updateIsAuthenticated = (value) => {
+        setIsAuthenticated(value);
+    }
+
+    const updateUserData = (userData) => {
+        setIsAuthenticated(true);
+        setUserData(userData);
+    }
+
+    const handleLogout = () => {
+        setUserData(null);
+        setToken(null);
+        setIsAuthenticated(false);
+    }
+    const updateShopList = (list) => {
+        setShopList(list);
+    }
 
     return (
         <UserContext.Provider value={{
             userData,
-            getMasterData,
+            updateUserData,
+            token,
+            setTokenValue,
+            handleLogout,
             shopList,
+            updateShopList,
+            eodShopId,
+            UpdateEodShopID,
+            eodAccountDate,
+            UpdateEodAccountDate,
+            isAuthenticated,
+            updateIsAuthenticated
         }}>
-
+            {children}
         </UserContext.Provider>
     )
 };

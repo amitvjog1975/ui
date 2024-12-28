@@ -1,0 +1,29 @@
+/* NoData.css */
+.no-data-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
+    height:70vh; /* Full viewport height */
+    background-color: #f9f9f9; /* Light background color */
+    color: #333; /* Dark text color */
+    text-align: center; /* Center text */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.no-data-icon {
+    font-size: 50px; /* Size of the icon */
+    margin-bottom: 20px; /* Space below the icon */
+}
+
+h2 {
+    font-size: 24px; /* Size of the heading */
+    margin: 10px 0; /* Space above and below the heading */
+}
+
+p {
+    font-size: 16px; /* Size of the paragraph text */
+    color: #666; /* Lighter text color */
+}

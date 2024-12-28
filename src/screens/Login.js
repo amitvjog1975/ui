@@ -1,9 +1,9 @@
-import React, { useContext, useState } from "react";
+import React, {  useContext, useState } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Button, Container, CssBaseline, Box, Avatar, Typography, TextField } from "@mui/material";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { authService } from "../services";
-import AuthContext from "../shared/AuthContext";
+import { authService , shopService} from "../services";
+import UserContext from "../shared/UserContext";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,11 +13,10 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-    const { userData, setUserData } = useContext(AuthContext);
+
+    const {updateUserData, updateShopList, updateIsAuthenticated}  = useContext(UserContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-
-
 
     const validateLogin = () => {
         setIsLoading(true);
@@ -26,14 +25,23 @@ const Login = () => {
             password: password
         }
         authService.authenticateLogin(postData).then(result => {
-            if (result.statusCode == 200) {
-                if (result.data) {
-                    
-                        setUserData(result.data);
+            if (result.statusCode === 200) {
+                if (result.data) {                    
+                    updateUserData(result.data);
+                    updateIsAuthenticated(true);
                         Cookies.set("kvsrsUser", JSON.stringify(result.data), { expires: 1, sameSite: 'strict', secure: true });
-                        navigate('/dashboard', { replace: true });
-                        setIsLoading(false);
-                    
+                        //getShopMasterList();                        
+                        shopService.getShopMasterList()
+                        .then(result => {
+                            updateShopList(result.data);
+                            setIsLoading(false);
+                            //console.log(shopList);
+                            //console.log(userData);  
+                            navigate('/dashboard', { replace: true });                            
+                        })
+                        .catch(err => {
+                            setIsLoading(false);
+                        });
                 }
             } else {
                 setIsLoading(false);

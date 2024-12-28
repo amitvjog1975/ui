@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NavMenu from '../components/NavMenu';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 
 const PublicLayout = () => {
+    const location = useLocation();
+    const currentPath = location.pathname;
+    const isHomePage = currentPath === '/' || currentPath === '/home';
+
     return (
         <div>
             <NavMenu />

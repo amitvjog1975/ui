@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from "react";
-import { useContext } from "react";
 import APIHelper from "../shared/APIHelper"
 import APIUrlConstants from "../shared/APIUrlConstants";
 import { authHeader } from "../shared/AuthHeader";
-import Cookies from "js-cookie";
 
 export const accountService = {
-    getAccountHeadData,
-    submitAccountEODData
+    get_full_eod_data,
+    get_eod_data,
+    submitAccountEODData,
+    get_shop_expenses,
+    update_shop_expenses
 }
 
-function getAccountHeadData(postData) {
-    return APIHelper.Post(APIUrlConstants.ACCOUNT_DATA, postData, authHeader())
+function get_full_eod_data(postData) {
+    return APIHelper.Post(APIUrlConstants.SHOP_FULL_EOD_DATA, postData, authHeader())
 }
+
+function get_eod_data(postData) {
+    return APIHelper.Post(APIUrlConstants.SHOP_EOD_DATA, postData, authHeader())
+}
+
 
 function submitAccountEODData(postData) {
-    return APIHelper.Post(APIUrlConstants.ACCOUNT_DATA, postData, authHeader())
+    return APIHelper.Post(APIUrlConstants.SUBMIT_ACCOUNT_DATA, postData, authHeader())
+}
+
+function get_shop_expenses(postData) {
+    return APIHelper.Post(APIUrlConstants.GET_SHOP_EXPENSES, postData, authHeader())
+}
+
+function update_shop_expenses(postData) {
+    return APIHelper.Post(APIUrlConstants.UPDATE_SHOP_EXPENSE, postData, authHeader())
 }
