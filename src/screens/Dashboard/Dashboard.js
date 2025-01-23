@@ -1,27 +1,27 @@
 ﻿
 import React, { useState, useEffect, useContext } from 'react';
 import { styled } from '@mui/material/styles';
-import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Typography, Box, Toolbar, Button, TableSortLabel, CircularProgress, LinearProgress } from '@mui/material';
+import { Table, TableBody, TableContainer, TableHead, TableRow, Paper, Typography, Box, Toolbar, Button, TableSortLabel, CircularProgress, LinearProgress, TextField } from '@mui/material';
 import Grid from '@mui/material/Grid2';
 import { ThumbUp } from '@mui/icons-material';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment/moment';
-import { dashboardService } from '../services/dashboard.service';
+import { dashboardService } from '../../services/dashboard.service';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import PageHeader from '../components/PageHeader';
+import PageHeader from '../../components/PageHeader';
 import PropTypes from 'prop-types';
 import { visuallyHidden } from '@mui/utils';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import Helper from '../common/Helper';
+import Helper from '../../common/Helper';
 
-import UserContext from '../shared/UserContext';
-import Loader from '../layouts/loader/Loader';
-import NoData from '../components/NoData';
+import UserContext from '../../shared/UserContext';
+import Loader from '../../layouts/loader/Loader';
+import NoData from '../../components/NoData';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -148,7 +148,6 @@ EnhancedTableHead.propTypes = {
 
 const Dashboard = () => {
     const location = useLocation();
-    const { UpdateEodShopID, UpdateEodAccountDate } = useContext(UserContext);
     const receivedData = location.state && location.state.data;
     const [dashboardData, setDashboardData] = useState(null);
     const [accountDateFrom, setAccountDateFrom] = useState(null);
@@ -169,6 +168,7 @@ const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [loadInitialComplete, setLoadInitialComplete] = useState(false);
     const [showData, setShowData] = useState(true);
+    const [calendarOpen, setCalendarOpen] = useState(false);
 
     const paginationModel = { page: 0, pageSize: 10 };
 
@@ -186,10 +186,8 @@ const Dashboard = () => {
 
     const navigate = useNavigate();
 
-    const showEodDetails = (shopid, accDate) => {
-        UpdateEodShopID(shopid);
-        UpdateEodAccountDate(accDate);
-        navigate('/day-account-eod');
+    const showEodDetails = (shopid, accountDate) => {
+        navigate('/day-account-eod/'+ shopid +'/' + Helper.FormatDate(accountDate, 'YYYY-MM-DD'));
     }
 
     useEffect(() => {
@@ -278,8 +276,8 @@ const Dashboard = () => {
                         setShowData(true);
                         if (!result.data.shopsList || result.data.shopsList.length == 0) {
                             setShowData(false);
-                        } else 
-                        setRows(result.data.shopsList);
+                        } else
+                            setRows(result.data.shopsList);
                         if (result.data.pagination) {
                             let pagearr = [];
                             setCurrentPageIndex(result.data.pagination.currentPage)
@@ -327,6 +325,11 @@ const Dashboard = () => {
         }
     };
 
+    const handleCalendarDateChange = (newValue) => {
+        setAccountDateFrom(newValue);
+        setCalendarOpen(false)
+    }
+
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
@@ -335,18 +338,19 @@ const Dashboard = () => {
         <>
             <PageHeader title="Dashboard">
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker', 'DatePicker']} sx={{ maxWidth: 200, margin: 1 }}>
-                        <DatePicker
-                            label="From"
-                            value={accountDateFrom}
-                            format='DD/MM/YYYY'
-                            disableFuture
-                            sx={{ maxWidth: 150, margin: 1 }}
-                            onChange={(newValue) => setAccountDateFrom(newValue)}
-                            slotProps={{ textField: { size: 'small' } }}
-                        />
-                    </DemoContainer>
-                </LocalizationProvider>                
+                    <DatePicker
+                        label="From"
+                        value={accountDateFrom}
+                        format='DD/MM/YYYY'
+                        disableFuture
+                        open={calendarOpen}
+                        onOpen={() => setCalendarOpen(true)}
+                        onClose={() => setCalendarOpen(false)}
+                        sx={{ maxWidth: 150, margin: 1 }}
+                        onChange={handleCalendarDateChange}
+                        renderInput={(params) => <TextField {...params} size="small" sx={{ '.MuiOutlinedInput-root': { height: '36px' } }} />}
+                    />
+                </LocalizationProvider>
             </PageHeader>
 
             <Grid container spacing={2} marginTop={1}>

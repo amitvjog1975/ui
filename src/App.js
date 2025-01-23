@@ -1,37 +1,43 @@
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import { useContext } from 'react';
 
 import PublicLayout from './layouts/Layout';
+import PrivateLayout from './layouts/PrivateLayout';
 import Home from './components/Home';
 import Login from './screens/Login';
-import Dashboard from './screens/Dashboard';
-import PrivateLayout from './layouts/PrivateLayout';
 import Logout from './screens/Logout';
-import DayAccountEoD from './screens/DayAccount/ShopAccountManager';
-import UserContext, { UserProvider } from './shared/UserContext';
-import { useContext, useEffect } from 'react';
+import DayAccountEoD from './screens/DayAccount/DayAccountEOD';
+import { UserProvider } from './shared/UserContext';
+import UserContext from './shared/UserContext';
 import { LoaderProvider } from './shared/LoaderContext';
+import Dashboard from './screens/Dashboard/Dashboard';
 
+function AppRoutes() {
 
-function App() {
   return (
-    <UserProvider>
-      <Routes>
+    <Routes>
         <Route path="/" element={<PublicLayout />}>
           <Route index element={<Home />} />
           <Route path="/login" element={<Login />} />
         </Route>
-
         <Route path="/" element={<PrivateLayout />}>
           <Route index element={<Home />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/day-account-eod" element={<DayAccountEoD />} />
+          <Route path="/day-account-eod/:eodShopID/:eodAccountDate" element={<DayAccountEoD />} />
         </Route>
-      </Routes>
-    </UserProvider>
+    </Routes>
   );
 }
 
-
+function App() {
+  return (
+    <UserProvider>
+      <LoaderProvider>
+        <AppRoutes />
+      </LoaderProvider>
+    </UserProvider>
+  );
+}
 
 export default App;

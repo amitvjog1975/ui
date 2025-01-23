@@ -18,12 +18,20 @@ export function UserProvider({ children }) {
         if (cookieDataStr !== null && cookieDataStr !== undefined && cookieDataStr !== "") {
             let userData = JSON.parse(cookieDataStr);
             setUserData(userData);
-            setIsAuthenticated(true);                        
-            shopService.getShopMasterList().then(result => {
-                setShopList(result.data);
-            })
+            setIsAuthenticated(true);
+
         }
     }, []);
+
+    useEffect(() => {
+        if (userData !== null && userData !== undefined) {
+            shopService.getShopMasterList().then(result => {
+                setShopList(result.data);
+            }).catch(error => {
+                console.log(error);
+            });
+        }
+    }, [userData]);
 
     useEffect(() => {
         console.log('isAuthenticated - ' + isAuthenticated);

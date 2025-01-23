@@ -1,0 +1,71 @@
+.cards-container .card {
+    display: none;
+  }
+  
+  .cards-container .card.visible {
+    display: block;
+  }
+  
+  @media (min-width: 768px) {
+    .cards-container .card {
+      display: block;
+    }
+  
+    .open-sidebar-btn {
+      display: none;
+    }
+  
+    .sidebar {
+      display: none;
+    }
+  }
+  
+  .open-sidebar-btn {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    z-index: 1000;
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar .close-btn {
+    background-color: #ff0000;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  
+  .sidebar button {
+    display: block;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+  }

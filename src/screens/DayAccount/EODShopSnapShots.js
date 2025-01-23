@@ -1,5 +1,5 @@
 import Grid from '@mui/material/Grid2';
-import BaseCard from '../BaseCard';
+import BaseCard from '../../components/BaseCard';
 import { Typography } from '@mui/material';
 import { Fragment } from 'react';
 

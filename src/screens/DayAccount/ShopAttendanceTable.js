@@ -5,7 +5,7 @@ import './ShopAttendanceTable.css';
 
 const ShopAttendanceTable = (props) => {
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10); // Set default rows per page
+    const [rowsPerPage, setRowsPerPage] = useState(5); // Set default rows per page
     const ShopAttendanceData = props.data;
     const isMobile = useMediaQuery('(max-width:600px)'); // Check if the screen is mobile size
 
@@ -22,12 +22,10 @@ const ShopAttendanceTable = (props) => {
         <>
             <Paper sx={{ overflowX: 'auto' }} elevation={1}>
                 <Table aria-label="go" className="table">
-                    <TableHead>
-                        <TableRow className="table-header">
-                            <TableCell>
-                                <Typography className={`table-header-cell ${isMobile ? 'table-cell-small' : 'table-cell-large'}`}>
-                                    Employee<br />
-                                </Typography>
+                    <TableHead sx={{backgroundColor:'#1976d2'}}>
+                        <TableRow>
+                            <TableCell sx={{ textAlign: 'left', color:'#ffffff' }}>
+                                    Employee
                             </TableCell>
                         </TableRow>
                     </TableHead>
